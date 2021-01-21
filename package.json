@@ -12,6 +12,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "http-build-query": "^0.7.0",
-    "randomstring": "^1.1.5"
+    "randomstring": "^1.1.5",
+    "request": "^2.88.2"
   }
 }
