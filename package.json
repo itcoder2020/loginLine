@@ -1,0 +1,17 @@
+{
+  "name": "lineLogin",
+  "version": "1.0.0",
+  "description": "line login",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "panupong",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "http-build-query": "^0.7.0",
+    "randomstring": "^1.1.5"
+  }
+}
