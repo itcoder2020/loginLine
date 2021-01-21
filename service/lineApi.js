@@ -4,6 +4,7 @@
 const request = require("request")
 var randomString = require("randomstring");
 var httpBuildQuery = require('http-build-query');
+var base64 = require('base-64')
 var LINE_LOGIN_CHANNEL_ID="1644976375"
 var LINE_LOGIN_CHANNEL_SECRET="af3e2cab0c10610782a1ba7b8b3877bc"
 var LINE_LOGIN_CALLBACK_URL="https://76aa4885cb09.ngrok.io/callback"
@@ -13,7 +14,7 @@ module.exports.authorize = function () {
         response_type: 'code',
         client_id: LINE_LOGIN_CHANNEL_ID,
         redirect_uri: LINE_LOGIN_CALLBACK_URL,
-        scope: 'openid profile',
+        scope: 'openid profile email',
         state: randomString.generate()
     }
     let api = baseUrl + httpBuildQuery(q)
@@ -37,6 +38,7 @@ module.exports.getProfile = ((accessToken) =>{
             request(option, (error, res, body) => {
                 if (error) throw new Error(error)
                 let obj = JSON.parse(body)
+                //console.log(obj)
                 if (typeof obj.error != "undefined") resolutionFunc(false)
                 resolutionFunc(obj)
             })
@@ -48,6 +50,15 @@ module.exports.getProfile = ((accessToken) =>{
 
     });
 })
+module.exports.getAllProfile = function(obj){
+    let userData = String(obj.id_token)
+    userData = userData.split(".")
+    //let obj = JSON.parse(base64.decode(userData[1]))
+    userData = base64.decode(userData[1])
+    console.log(JSON.parse(userData))
+    
+    return JSON.parse(userData)
+}
 module.exports.requestAccessToken = function (code) {
     return new Promise((resolutionFunc, rejectionFunc) => {
         try {
@@ -72,8 +83,15 @@ module.exports.requestAccessToken = function (code) {
                 if (error) throw new Error(error)
                 let obj = JSON.parse(body)
                 //console.log(obj)
-                if (typeof obj.error != "undefined") resolutionFunc(false)
-                resolutionFunc(obj)
+                if (typeof obj.error != "undefined"){
+                    resolutionFunc(false)
+                } else{
+    
+                    resolutionFunc(obj)
+                    
+                }
+               
+
             })
         } catch (error) {
             console.log(error)
